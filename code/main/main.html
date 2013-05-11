@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>Constructing the Globe</title>
+
+      <script src="js/Three.js"></script>
+  </head>
+  <body>
+    <div id="globe">
+      <canvas height="600" width="1000"></canvas>
+    </div>
+
+
+    <script>
+
+      // couple of constants
+      var POS_X = 1800;
+      var POS_Y = 500;
+      var POS_Z = 1800;
+      var WIDTH = 1000;
+      var HEIGHT = 600;
+
+      var FOV = 45;
+      var NEAR = 1;
+      var FAR = 4000;
+
+      // some global variables and initialization code
+      // simple basic renderer
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(WIDTH,HEIGHT);
+      renderer.setClearColorHex(0x111111);
+
+      // add it to the target element
+      var mapDiv = document.getElementById("globe");
+      mapDiv.appendChild(renderer.domElement);
+
+      // setup a camera that points to the center
+      var camera = new THREE.PerspectiveCamera(FOV,WIDTH/HEIGHT,NEAR,FAR);
+      camera.position.set(POS_X,POS_Y, POS_Z);
+      camera.lookAt(new THREE.Vector3(0,0,0));
+
+      // create a basic scene and add the camera
+      var scene = new THREE.Scene();
+      scene.add(camera);
+
+      // we wait until the document is loaded before loading the
+      // density data.
+
+      // $(document).ready(function()  {
+      //   jQuery.get('data/density.csv', function(data) {
+      //      addDensity(CSVToArray(data));
+      addLights();
+      addEarth();
+      //         addClouds();
+      render();
+      //   });
+      //  });
+
+   // add the earth
+   function addEarth() {
+   var spGeo = new THREE.SphereGeometry(600,50,50);
+   var planetTexture = THREE.ImageUtils.loadTexture( "./pics/nearth.jpg" );
+  // alert('its..b..ing...l.o.a.d.i.n.g..');
+   var mat2 =  new THREE.MeshPhongMaterial( {
+   map: planetTexture,
+   shininess: 0.2 } );
+   sp = new THREE.Mesh(spGeo,mat2);
+   scene.add(sp);
+
+    }
+   // add a simple light
+   function addLights() {
+//   light = new THREE.DirectionalLight(0x3333ee, 3.5, 500 );
+   light = new THREE.DirectionalLight(0x3333ee, 3.5, 500 );
+   scene.add( light );
+        light.position.set(POS_X,POS_Y,POS_Z);
+   }
+
+
+
+// render the scene
+   function render() {
+   //var timer = Date.now() * 0.0001;
+   //camera.position.x = (Math.cos( timer ) *  1800);
+   //camera.position.z = (Math.sin( timer ) *  1800) ;
+   //camera.lookAt( scene.position );
+   //light.position = camera.position;
+   //light.lookAt(scene.position);
+//alert('next....');
+   renderer.render( scene, camera );
+   requestAnimationFrame( render );
+    }
+
+    </script>
+  </body>
+</html>
