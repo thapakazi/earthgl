@@ -1,0 +1,2 @@
+launch:
+	firefox main.html
